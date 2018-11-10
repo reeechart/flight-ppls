@@ -4,11 +4,12 @@ from django.contrib.auth.models import User
 
 from flight_booking.models import Flight
 from flight_booking.models import Booking
+from flight_booking.models import Invoice
 
 from flight_booking.serializers import FlightSerializer
 from flight_booking.serializers import BookingSerializer
 from flight_booking.serializers import UserSerializer
-
+from flight_booking.serializers import InvoiceSerializer
 
 class FlightListView(generics.ListCreateAPIView):
     queryset = Flight.objects.all()
@@ -31,3 +32,7 @@ class BookingView(generics.RetrieveDestroyAPIView):
 class UserListView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+class InvoiceListView(generics.ListCreateAPIView):
+    queryset = Invoice.objects.all()
+    serializer_class = InvoiceSerializer

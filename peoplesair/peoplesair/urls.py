@@ -21,6 +21,7 @@ from flight_booking.views import FlightView
 from flight_booking.views import BookingListView
 from flight_booking.views import BookingView
 from flight_booking.views import UserListView
+from flight_booking.views import InvoiceListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,5 +29,6 @@ urlpatterns = [
     path('flights/<slug:number>/', FlightView.as_view(), name='flight'),
     path('bookings/', BookingListView.as_view(), name='booking-list'),
     path('bookings/<slug:number>/', BookingView.as_view(), name='booking'),
-    path('users/<slug:number>/', UserListView.as_view(), name='user')
+    path('users/<slug:number>/', UserListView.as_view(), name='user'),
+    path('invoice/', InvoiceListView.as_view(), name='invoice')
 ]

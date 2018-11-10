@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 from flight_booking.models import Flight
 from flight_booking.models import Booking
-
+from flight_booking.models import Invoice
 
 class FlightSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,3 +22,11 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email')
+
+class InvoiceSerializer(serializers.ModelSerializer):
+    booking = BookingSerializer()
+
+    class Meta:
+        model = Invoice
+        exclude = ('id', )
+        
