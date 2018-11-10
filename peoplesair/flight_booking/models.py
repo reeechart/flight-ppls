@@ -1,9 +1,9 @@
 from django.db import models
-
-# Create your models here.
+from django.utils.translation import ugettext_lazy as _
 
 class Flight(models.Model):
-    departure = models.CharField(max_length=255, blank=False)
-    arrival = models.CharField(max_length=255, blank=False)
-    departure_time = models.DateTimeField(auto_now=False)
-    available_seats = models.IntegerField(editable=True)
+    origin = models.CharField(_('Origin'), max_length=128)
+    destination = models.CharField(_('Destination'), max_length=128)
+    departure = models.DateTimeField(_('Departure'))
+    arrival = models.DateTimeField(_('Arrival'))
+    available_seats = models.IntegerField(_('Available Seats'))
