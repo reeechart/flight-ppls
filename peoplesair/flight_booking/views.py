@@ -1,10 +1,13 @@
 from rest_framework import generics
 
+from django.contrib.auth.models import User
+
 from flight_booking.models import Flight
 from flight_booking.models import Booking
 
 from flight_booking.serializers import FlightSerializer
 from flight_booking.serializers import BookingSerializer
+from flight_booking.serializers import UserSerializer
 
 
 class FlightListView(generics.ListCreateAPIView):
@@ -24,3 +27,7 @@ class BookingView(generics.RetrieveDestroyAPIView):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
     lookup_field = 'number'
+
+class UserListView(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
