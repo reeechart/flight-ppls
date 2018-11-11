@@ -26,3 +26,5 @@ class Invoice(models.Model):
 class Ticket(models.Model):
     user = models.ForeignKey(User, related_name='tickets', on_delete=models.CASCADE)
     flight = models.ForeignKey(Flight, related_name='tickets', on_delete=models.CASCADE)
+    first_name = models.CharField(_('First Name'), max_length=128)
+    last_name = models.CharField(_('Last Name'), max_length=128)
