@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from jsonfield import JSONField
 
 from django.contrib.auth.models import User
 
@@ -15,6 +16,7 @@ class Booking(models.Model):
     number = models.CharField(_('Number'), max_length=128, unique=True)
     user = models.ForeignKey(User, related_name='bookings', on_delete=models.CASCADE)
     flight = models.ForeignKey(Flight, related_name='bookings', on_delete=models.CASCADE)
+    passengers = JSONField(_('Passangers'))
 
 class Invoice(models.Model):
     user = models.ForeignKey(User, related_name='invoices', on_delete=models.CASCADE)

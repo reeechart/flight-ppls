@@ -1,0 +1,26 @@
+[
+  {
+    "model": "flight_booking.flight",
+    "pk": 1,
+    "fields": {
+      "number": "PA001",
+      "origin": "Bandung",
+      "destination": "Medan",
+      "departure": "2018-11-11T12:00:00+00:00",
+      "arrival": "2018-11-11T14:20:00+00:00",
+      "available_seats": 70
+    }
+  },
+  {
+    "model": "flight_booking.flight",
+    "pk": 2,
+    "fields": {
+      "number": "PA002",
+      "origin": "Medan",
+      "destination": "Bandung",
+      "departure": "2018-12-11T12:00:00+00:00",
+      "arrival": "2018-12-11T14:20:00+00:00",
+      "available_seats": 70
+    }
+  }
+]
