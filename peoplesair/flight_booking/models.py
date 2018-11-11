@@ -20,3 +20,7 @@ class Invoice(models.Model):
     user = models.ForeignKey(User, related_name='invoices', on_delete=models.CASCADE)
     booking = models.ForeignKey(Booking, related_name='invoices', on_delete=models.CASCADE)
     price = models.IntegerField(_('Price'))
+
+class Ticket(models.Model):
+    user = models.ForeignKey(User, related_name='tickets', on_delete=models.CASCADE)
+    flight = models.ForeignKey(Flight, related_name='tickets', on_delete=models.CASCADE)

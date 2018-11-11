@@ -22,6 +22,7 @@ from flight_booking.views import BookingListView
 from flight_booking.views import BookingView
 from flight_booking.views import UserListView
 from flight_booking.views import InvoiceListView
+from flight_booking.views import TicketListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,5 +31,6 @@ urlpatterns = [
     path('bookings/', BookingListView.as_view(), name='booking-list'),
     path('bookings/<slug:number>/', BookingView.as_view(), name='booking'),
     path('users/<slug:number>/', UserListView.as_view(), name='user'),
-    path('invoice/', InvoiceListView.as_view(), name='invoice')
+    path('invoices/', InvoiceListView.as_view(), name='invoice'),
+    path('tickets/', TicketListView.as_view(), name='ticket')
 ]
