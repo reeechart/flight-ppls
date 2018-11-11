@@ -10,7 +10,7 @@ class Flight(models.Model):
     destination = models.CharField(_('Destination'), max_length=128)
     departure = models.DateTimeField(_('Departure'))
     arrival = models.DateTimeField(_('Arrival'))
-    available_seats = models.IntegerField(_('Available Seats'))
+    available_seats = models.PositiveIntegerField(_('Available Seats'))
 
 class Booking(models.Model):
     number = models.CharField(_('Number'), max_length=128, unique=True)

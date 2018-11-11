@@ -21,6 +21,7 @@ class BookingSerializer(serializers.ModelSerializer):
         slug_field='username',
         queryset=User.objects.all()
     )
+    passengers = serializers.JSONField()
 
     class Meta:
         model = Booking
