@@ -13,7 +13,14 @@ class FlightSerializer(serializers.ModelSerializer):
         exclude = ('id', )
 
 class BookingSerializer(serializers.ModelSerializer):
-    flight = FlightSerializer()
+    flight = serializers.SlugRelatedField(
+        slug_field='number',
+        queryset=Flight.objects.all()
+    )
+    user =  serializers.SlugRelatedField(
+        slug_field='username',
+        queryset=User.objects.all()
+    )
 
     class Meta:
         model = Booking
@@ -25,14 +32,28 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('username', 'first_name', 'last_name', 'email')
 
 class InvoiceSerializer(serializers.ModelSerializer):
-    booking = BookingSerializer()
+    booking = serializers.SlugRelatedField(
+        slug_field='number',
+        queryset=Booking.objects.all()
+    )
+    user =  serializers.SlugRelatedField(
+        slug_field='username',
+        queryset=User.objects.all()
+    )
 
     class Meta:
         model = Invoice
         exclude = ('id', )
 
 class TicketSerializer(serializers.ModelSerializer):
-    flight = FlightSerializer()
+    flight = serializers.SlugRelatedField(
+        slug_field='number',
+        queryset=Flight.objects.all()
+    )
+    user =  serializers.SlugRelatedField(
+        slug_field='username',
+        queryset=User.objects.all()
+    )
 
     class Meta:
         model = Ticket
