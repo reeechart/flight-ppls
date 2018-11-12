@@ -42,3 +42,8 @@ class InvoiceListView(generics.ListCreateAPIView):
 class TicketListView(generics.ListCreateAPIView):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
+
+class TicketView(generics.RetrieveAPIView):
+    queryset = Ticket.objects.all()
+    serializer_class = TicketSerializer
+    lookup_field = 'id'

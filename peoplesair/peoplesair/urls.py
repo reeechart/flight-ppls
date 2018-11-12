@@ -22,6 +22,7 @@ from flight_booking.views import BookingListView
 from flight_booking.views import BookingView
 from flight_booking.views import UserListView
 from flight_booking.views import InvoiceListView
+from flight_booking.views import TicketView
 from flight_booking.views import TicketListView
 
 urlpatterns = [
@@ -31,6 +32,7 @@ urlpatterns = [
     path('bookings/', BookingListView.as_view(), name='booking-list'),
     path('bookings/<slug:number>/', BookingView.as_view(), name='booking'),
     path('users/<slug:number>/', UserListView.as_view(), name='user'),
-    path('invoices/', InvoiceListView.as_view(), name='invoice'),
-    path('tickets/', TicketListView.as_view(), name='ticket')
+    path('invoices/', InvoiceListView.as_view(), name='invoice-list'),
+    path('tickets/', TicketListView.as_view(), name='ticket-list'),
+    path('tickets/<slug:id>/', TicketView.as_view(), name='ticket')
 ]
