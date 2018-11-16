@@ -44,5 +44,24 @@ client.subscribe('book-create-booking', async function({ task, taskService }) {
 // client.subscribe('book-cancel-booking', async function({ task, taskService }) {
 //   await taskService.complete(task);
 // });
-  
-  
+
+client.subscribe('cancel-cancel-booking', async function({ task, taskService }) {
+  const bookingNumber = task.variables.get('booking_number');
+  const processVariables = new Variables();
+
+  try {
+    let response = await axios.get(BASE_URL+'bookings/'+bookingNumber+'/');
+    bookingDetail = response.data
+    if (bookingDetail.status === 'paid') {
+      processVariables.set('paid', true);
+    } else {
+      processVariables.set('paid', false);
+    }
+    await axios.patch(BASE_URL+'bookings/'+bookingNumber+'/', {
+      status: 'canceled'
+    });
+  } catch(error) {
+    console.log(error)
+  }
+  await taskService.complete(task, processVariables);
+});
