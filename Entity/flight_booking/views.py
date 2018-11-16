@@ -50,23 +50,24 @@ class InvoiceListView(generics.ListCreateAPIView):
     queryset = Invoice.objects.all()
     serializer_class = InvoiceSerializer
 
-class TicketListView(generics.ListCreateAPIView):
+class TicketView(generics.ListCreateAPIView):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
 
-class TicketView(APIView):
     def get(self, request):
-        print(request.query_params)
-        first_name = request.query_params.get('first-name')
-        last_name = request.query_params.get('last-name')
-        flight_number = request.query_params.get('flight-number')
-        ticket = get_object_or_404(
-            Ticket,
-            first_name=first_name,
-            last_name=last_name,
-            flight__number=flight_number
-        )
-        return Response(TicketSerializer(ticket).data, status=200)
+        if request.query_params:
+            first_name = request.query_params.get('first-name')
+            last_name = request.query_params.get('last-name')
+            flight_number = request.query_params.get('flight-number')
+            ticket = get_object_or_404(
+                Ticket,
+                first_name=first_name,
+                last_name=last_name,
+                flight__number=flight_number
+            )
+            return Response(TicketSerializer(ticket).data, status=200)
+        else:
+            return super().get(request)
         
 
 class MockNotifyPayment(APIView):
