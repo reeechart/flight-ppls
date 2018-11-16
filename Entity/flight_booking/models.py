@@ -36,7 +36,7 @@ class Booking(models.Model):
     number = models.CharField(_('Number'), max_length=128, unique=True)
     user = models.ForeignKey(User, related_name='bookings', on_delete=models.CASCADE)
     flight = models.ForeignKey(Flight, related_name='bookings', on_delete=models.CASCADE)
-    passengers = JSONField(_('Passangers'))
+    passengers = JSONField(_('Passengers'))
     status = models.CharField(_('Status'), max_length=128, choices=STATUS_CHOICES)
 
 class Invoice(models.Model):
