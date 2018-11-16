@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0wkvkt4" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="2.0.3">
-  <bpmn:process id="CancelFlight" name="CancelFlight" isExecutable="true" camunda:jobPriority="1" camunda:taskPriority="1">
-    <bpmn:startEvent id="StartCancelFlight" name="Start" camunda:formKey="BookingNumber">
+  <bpmn:process id="CancelBooking" name="CancelBooking" isExecutable="true" camunda:jobPriority="1" camunda:taskPriority="1">
+    <bpmn:startEvent id="StartCancelBooking" name="Start" camunda:formKey="BookingNumber">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="booking_number" label="Booking Number" type="string" />
@@ -29,7 +29,7 @@
       <bpmn:incoming>SequenceFlow_0diba0b</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1sh98bx</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_1mctybc" sourceRef="StartCancelFlight" targetRef="TaskCancelBooking" />
+    <bpmn:sequenceFlow id="SequenceFlow_1mctybc" sourceRef="StartCancelBooking" targetRef="TaskCancelBooking" />
     <bpmn:sequenceFlow id="SequenceFlow_0ljs0al" sourceRef="TaskCancelBooking" targetRef="ExclusiveGateway_1nrn4cw" />
     <bpmn:sequenceFlow id="SequenceFlow_0diba0b" sourceRef="TaskRefund" targetRef="EndEvent_1us4l7s" />
     <bpmn:sequenceFlow id="SequenceFlow_1sh98bx" name="not paid" sourceRef="ExclusiveGateway_1nrn4cw" targetRef="EndEvent_1us4l7s">
@@ -37,8 +37,8 @@
     </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="CancelFlight">
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartCancelFlight">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="CancelBooking">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartCancelBooking">
         <dc:Bounds x="290" y="102" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="296" y="145" width="25" height="14" />
