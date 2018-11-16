@@ -32,7 +32,7 @@
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="SequenceFlow_04yshwy" sourceRef="ExclusiveGateway_1r2y8bd" targetRef="IntermediateCatchEvent_0m4bx4b" />
-    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_0s70bjo">
+    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_0s70bjo" camunda:asyncBefore="true">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property />
@@ -44,7 +44,6 @@
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1ulavin" sourceRef="ExclusiveGateway_1r2y8bd" targetRef="IntermediateCatchEvent_0s70bjo" />
     <bpmn:sequenceFlow id="SequenceFlow_05u0jnr" sourceRef="IntermediateCatchEvent_0s70bjo" targetRef="TaskIssueTicket" />
-    <bpmn:sequenceFlow id="SequenceFlow_14niawa" sourceRef="TaskIssueTicket" targetRef="TaskFinishBooking" />
     <bpmn:endEvent id="EndEvent_0d7djxs">
       <bpmn:incoming>SequenceFlow_02bzrit</bpmn:incoming>
     </bpmn:endEvent>
@@ -58,7 +57,7 @@
       <bpmn:incoming>SequenceFlow_05u0jnr</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_14niawa</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="TaskCancelBooking" name="Cancel Booking" camunda:type="external" camunda:topic="cancel-cancel-booking">
+    <bpmn:serviceTask id="TaskCancelBooking" name="Cancel Bo" camunda:type="external" camunda:topic="cancel-cancel-booking">
       <bpmn:incoming>SequenceFlow_1nqzdr6</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0m6oe1j</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -91,6 +90,7 @@
       <bpmn:outgoing>SequenceFlow_0bdl12r</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_0bdl12r" sourceRef="TaskCreateInvoice" targetRef="TaskNotifyPaymentGateway" />
+    <bpmn:sequenceFlow id="SequenceFlow_14niawa" sourceRef="TaskIssueTicket" targetRef="TaskFinishBooking" />
   </bpmn:process>
   <bpmn:message id="Message_102mu27" name="PaymentGateway" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -130,10 +130,6 @@
       <bpmndi:BPMNEdge id="SequenceFlow_05u0jnr_di" bpmnElement="SequenceFlow_05u0jnr">
         <di:waypoint x="1245" y="52" />
         <di:waypoint x="1295" y="52" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_14niawa_di" bpmnElement="SequenceFlow_14niawa">
-        <di:waypoint x="1395" y="52" />
-        <di:waypoint x="1445" y="52" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="EndEvent_0d7djxs_di" bpmnElement="EndEvent_0d7djxs">
         <dc:Bounds x="1595" y="34" width="36" height="36" />
@@ -199,6 +195,10 @@
       <bpmndi:BPMNEdge id="SequenceFlow_0bdl12r_di" bpmnElement="SequenceFlow_0bdl12r">
         <di:waypoint x="909" y="120" />
         <di:waypoint x="959" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_14niawa_di" bpmnElement="SequenceFlow_14niawa">
+        <di:waypoint x="1395" y="52" />
+        <di:waypoint x="1445" y="52" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

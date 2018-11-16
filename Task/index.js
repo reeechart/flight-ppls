@@ -50,7 +50,7 @@ client.subscribe('book-create-booking', async function({ task, taskService }) {
       number: bookingNumber,
       status: 'pending'
     });
-    processVariables.set('bookingNumber', bookingNumber);
+    processVariables.set('booking_number', bookingNumber);
     processVariables.set('created', true);
   } catch(error) {
     console.log("Error!")
@@ -62,7 +62,7 @@ client.subscribe('book-create-booking', async function({ task, taskService }) {
 
 client.subscribe('book-create-invoice', async function({ task, taskService }) {
   const username = task.variables.get('username');
-  const bookingNumber = task.variables.get('bookingNumber');
+  const bookingNumber = task.variables.get('booking_number');
   const totalPrice = task.variables.get('totalPrice');
   try {
     let response = await axios.post(BASE_URL+'invoices/', {
@@ -77,14 +77,31 @@ client.subscribe('book-create-invoice', async function({ task, taskService }) {
 });
 
 client.subscribe('book-notify-payment-gateway', async function({ task, taskService }) {
-  const paymentGateWayUrl = "http://localhost:8000/mock/payment/"
+  const paymentGateWayUrl = "http://localhost:8000/payment/"
   await taskService.complete(task);
 });
 
+client.subscribe('book-issue-ticket', async function({ task, taskService }) {
+  const flightNumber = task.variables.get('flight_number');
+  const username = task.variables.get('username');
+  const passengers = task.variables.get('passengers');
+  try {
+    for(let i=0;i<passengers.length;i++) {
+      await axios.post(BASE_URL+'tickets/', {
+        flight: flightNumber,
+        user: username,
+        first_name: passengers[i].first_name,
+        last_name: passengers[i].last_name
+      })
+    }
+  } catch(error) {
+  }
+  await taskService.complete(task);
+});
 
-// client.subscribe('book-cancel-booking', async function({ task, taskService }) {
-//   await taskService.complete(task);
-// });
+client.subscribe('book-finish-booking', async function({ task, taskService }) {
+  await taskService.complete(task);
+});
 
 client.subscribe('cancel-cancel-booking', async function({ task, taskService }) {
   const bookingNumber = task.variables.get('booking_number');
