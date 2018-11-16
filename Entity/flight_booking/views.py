@@ -1,4 +1,7 @@
 from rest_framework import generics
+from rest_framework.views import APIView
+
+import requests
 
 from django.contrib.auth.models import User
 
@@ -38,7 +41,7 @@ class UserListView(generics.ListCreateAPIView):
 class UserView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    lookup_field = 'id'
+    lookup_field = 'username'
 
 class InvoiceListView(generics.ListCreateAPIView):
     queryset = Invoice.objects.all()
@@ -52,3 +55,10 @@ class TicketView(generics.RetrieveAPIView):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
     lookup_field = 'id'
+
+class MockNotifyPayment(APIView):
+    def post(self, request):
+        booking_number = request.data.get("booking_number")
+        callback_url = request.data.get("callback_url")
+        request = requests.post(callback_url, data={status:"paid"})
+

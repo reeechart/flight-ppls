@@ -67,4 +67,4 @@ class TicketSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ticket
-        fields = ('id', 'user', 'flight')
+        exclude = ('id', )
