@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1vz7x86" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="2.0.3">
+  <bpmn:process id="RescheduleBooking" name="RescheduleBooking" isExecutable="true" camunda:jobPriority="1" camunda:taskPriority="1">
+    <bpmn:startEvent id="RescheduleBookingStart" name="Start">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="booking_number" label="Booking Number" type="string" />
+          <camunda:formField id="flight_number" label="New Flight Number" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>SequenceFlow_0vtpdyw</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:callActivity id="TaskCancelBookedFlight" name="Cancel Booked Flight" calledElement="CancelBooking">
+      <bpmn:incoming>SequenceFlow_19zyape</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0lkzzxe</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:callActivity id="TaskBookNewFlight" name="Book New Flight" calledElement="BookFlight">
+      <bpmn:incoming>SequenceFlow_0lkzzxe</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0sw6dgt</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:endEvent id="EndEvent_1k5ugst">
+      <bpmn:incoming>SequenceFlow_0sw6dgt</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0lkzzxe" sourceRef="TaskCancelBookedFlight" targetRef="TaskBookNewFlight" />
+    <bpmn:sequenceFlow id="SequenceFlow_0sw6dgt" sourceRef="TaskBookNewFlight" targetRef="EndEvent_1k5ugst" />
+    <bpmn:sequenceFlow id="SequenceFlow_0vtpdyw" sourceRef="RescheduleBookingStart" targetRef="TaskGetFlightPassengers" />
+    <bpmn:sequenceFlow id="SequenceFlow_19zyape" sourceRef="TaskGetFlightPassengers" targetRef="TaskCancelBookedFlight" />
+    <bpmn:serviceTask id="TaskGetFlightPassengers" name="Get Flight Passengers" camunda:type="external" camunda:topic="reschedule-get-passenger">
+      <bpmn:incoming>SequenceFlow_0vtpdyw</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_19zyape</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="RescheduleBooking">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="RescheduleBookingStart">
+        <dc:Bounds x="123" y="270" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="129" y="313" width="25" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CallActivity_0qxy4le_di" bpmnElement="TaskCancelBookedFlight">
+        <dc:Bounds x="429" y="248" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CallActivity_19as5nj_di" bpmnElement="TaskBookNewFlight">
+        <dc:Bounds x="628" y="248" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1k5ugst_di" bpmnElement="EndEvent_1k5ugst">
+        <dc:Bounds x="804" y="270" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0lkzzxe_di" bpmnElement="SequenceFlow_0lkzzxe">
+        <di:waypoint x="529" y="288" />
+        <di:waypoint x="628" y="288" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0sw6dgt_di" bpmnElement="SequenceFlow_0sw6dgt">
+        <di:waypoint x="728" y="288" />
+        <di:waypoint x="804" y="288" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0vtpdyw_di" bpmnElement="SequenceFlow_0vtpdyw">
+        <di:waypoint x="159" y="288" />
+        <di:waypoint x="238" y="288" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_19zyape_di" bpmnElement="SequenceFlow_19zyape">
+        <di:waypoint x="338" y="288" />
+        <di:waypoint x="429" y="288" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_0atvkuf_di" bpmnElement="TaskGetFlightPassengers">
+        <dc:Bounds x="238" y="248" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
