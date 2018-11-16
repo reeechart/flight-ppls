@@ -9,7 +9,7 @@
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_0vrj6p6</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="TaskCancelBooking" name="Cancel Booking" camunda:type="external" camunda:topic="cancel-delete-booking">
+    <bpmn:serviceTask id="TaskCancelBooking" name="Cancel Booking" camunda:type="external" camunda:topic="cancel-cancel-booking">
       <bpmn:incoming>SequenceFlow_08kufhy</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_12tnc6t</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1bhbtp0</bpmn:outgoing>
