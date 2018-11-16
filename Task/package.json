@@ -1,0 +1,15 @@
+{
+  "name": "flight-booking-task",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "camunda-external-task-client-js": "^1.1.0-alpha1"
+  }
+}
