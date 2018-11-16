@@ -14,7 +14,6 @@
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_1wcx8n6</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_0bdl12r" sourceRef="TaskCreateInvoice" targetRef="TaskNotifyPaymentGateway" />
     <bpmn:sendTask id="TaskNotifyPaymentGateway" name="Notify Payment Gateway" camunda:type="external" camunda:topic="book-notify-payment-gateway">
       <bpmn:incoming>SequenceFlow_0bdl12r</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_14dmx50</bpmn:outgoing>
@@ -34,6 +33,11 @@
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="SequenceFlow_04yshwy" sourceRef="ExclusiveGateway_1r2y8bd" targetRef="IntermediateCatchEvent_0m4bx4b" />
     <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_0s70bjo">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property />
+        </camunda:properties>
+      </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1ulavin</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_05u0jnr</bpmn:outgoing>
       <bpmn:messageEventDefinition messageRef="Message_102mu27" />
@@ -50,15 +54,11 @@
     <bpmn:endEvent id="EndEvent_172dgka">
       <bpmn:incoming>SequenceFlow_0m6oe1j</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="TaskCreateInvoice" name="Create Invoice" camunda:type="external" camunda:topic="book-create-invoice">
-      <bpmn:incoming>SequenceFlow_1se153k</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0bdl12r</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:serviceTask id="TaskIssueTicket" name="Issue Ticket" camunda:type="external" camunda:topic="book-issue-ticket">
       <bpmn:incoming>SequenceFlow_05u0jnr</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_14niawa</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="TaskCancelBooking" name="Cancel Booking" camunda:type="external" camunda:topic="book-cancel-booking">
+    <bpmn:serviceTask id="TaskCancelBooking" name="Cancel Booking" camunda:type="external" camunda:topic="cancel-cancel-booking">
       <bpmn:incoming>SequenceFlow_1nqzdr6</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0m6oe1j</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -86,6 +86,11 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${created}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0dgzqc3" sourceRef="TaskReserveSeat" targetRef="ExclusiveGateway_0x3143b" />
+    <bpmn:serviceTask id="TaskCreateInvoice" name="Create Invoice" camunda:type="external" camunda:topic="book-create-invoice">
+      <bpmn:incoming>SequenceFlow_1se153k</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0bdl12r</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0bdl12r" sourceRef="TaskCreateInvoice" targetRef="TaskNotifyPaymentGateway" />
   </bpmn:process>
   <bpmn:message id="Message_102mu27" name="PaymentGateway" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -96,10 +101,6 @@
           <dc:Bounds x="337" y="145" width="24" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_0bdl12r_di" bpmnElement="SequenceFlow_0bdl12r">
-        <di:waypoint x="909" y="120" />
-        <di:waypoint x="959" y="120" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="SendTask_0umxedl_di" bpmnElement="TaskNotifyPaymentGateway">
         <dc:Bounds x="959" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -152,9 +153,6 @@
       <bpmndi:BPMNShape id="EndEvent_172dgka_di" bpmnElement="EndEvent_172dgka">
         <dc:Bounds x="1459" y="158" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_18nnbig_di" bpmnElement="TaskCreateInvoice">
-        <dc:Bounds x="809" y="80" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_1bh1c3b_di" bpmnElement="TaskIssueTicket">
         <dc:Bounds x="1295" y="12" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -194,6 +192,13 @@
       <bpmndi:BPMNEdge id="SequenceFlow_0dgzqc3_di" bpmnElement="SequenceFlow_0dgzqc3">
         <di:waypoint x="535" y="120" />
         <di:waypoint x="612" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_18nnbig_di" bpmnElement="TaskCreateInvoice">
+        <dc:Bounds x="809" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0bdl12r_di" bpmnElement="SequenceFlow_0bdl12r">
+        <di:waypoint x="909" y="120" />
+        <di:waypoint x="959" y="120" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
