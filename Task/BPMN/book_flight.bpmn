@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_0x9szu7" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="2.0.3">
   <bpmn:process id="BookFlight" name="BookFlight" isExecutable="true" camunda:jobPriority="1" camunda:taskPriority="1">
-    <bpmn:startEvent id="StartBookFlight" name="Star" camunda:formKey="UserInput">
+    <bpmn:startEvent id="StartBookFlight" name="Start" camunda:formKey="UserInput">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property />
         </camunda:properties>
         <camunda:formData>
-          <camunda:formField id="flight_id" label="Flight Id" type="long" />
-          <camunda:formField id="user_id" label="User Id" type="long" />
+          <camunda:formField id="flight_number" label="Flight Id" type="long" />
+          <camunda:formField id="username" label="User Id" type="long" />
+          <camunda:formField id="passengers" type="string" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_1wcx8n6</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0bdl12r" sourceRef="TaskCreateInvoice" targetRef="TaskNotifyPaymentGateway" />
-    <bpmn:sendTask id="TaskNotifyPaymentGateway" name="Notify Payment Gateway" camunda:type="external" camunda:topic="notify-payment-gateway">
+    <bpmn:sendTask id="TaskNotifyPaymentGateway" name="Notify Payment Gateway" camunda:type="external" camunda:topic="book-notify-payment-gateway">
       <bpmn:incoming>SequenceFlow_0bdl12r</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_14dmx50</bpmn:outgoing>
     </bpmn:sendTask>
@@ -28,7 +29,7 @@
       <bpmn:incoming>SequenceFlow_04yshwy</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1nqzdr6</bpmn:outgoing>
       <bpmn:timerEventDefinition>
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">5m</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT30S</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="SequenceFlow_04yshwy" sourceRef="ExclusiveGateway_1r2y8bd" targetRef="IntermediateCatchEvent_0m4bx4b" />
@@ -45,32 +46,27 @@
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_02bzrit" sourceRef="TaskFinishBooking" targetRef="EndEvent_0d7djxs" />
     <bpmn:sequenceFlow id="SequenceFlow_1nqzdr6" sourceRef="IntermediateCatchEvent_0m4bx4b" targetRef="TaskCancelBooking" />
-    <bpmn:sequenceFlow id="SequenceFlow_0m6oe1j" sourceRef="TaskCancelBooking" targetRef="TaskUnreserveBooking" />
+    <bpmn:sequenceFlow id="SequenceFlow_0m6oe1j" sourceRef="TaskCancelBooking" targetRef="EndEvent_172dgka" />
     <bpmn:endEvent id="EndEvent_172dgka">
-      <bpmn:incoming>SequenceFlow_1vc7t75</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0m6oe1j</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_1vc7t75" sourceRef="TaskUnreserveBooking" targetRef="EndEvent_172dgka" />
-    <bpmn:serviceTask id="TaskCreateInvoice" name="Create Invoice" camunda:type="external" camunda:topic="create-invoice">
+    <bpmn:serviceTask id="TaskCreateInvoice" name="Create Invoice" camunda:type="external" camunda:topic="book-create-invoice">
       <bpmn:incoming>SequenceFlow_1se153k</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0bdl12r</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="TaskIssueTicket" name="Issue Ticket" camunda:type="external" camunda:topic="issue-ticket">
+    <bpmn:serviceTask id="TaskIssueTicket" name="Issue Ticket" camunda:type="external" camunda:topic="book-issue-ticket">
       <bpmn:incoming>SequenceFlow_05u0jnr</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_14niawa</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="TaskCancelBooking" name="Cancel Booking" camunda:type="external" camunda:topic="cancel-booking">
+    <bpmn:serviceTask id="TaskCancelBooking" name="Cancel Booking" camunda:type="external" camunda:topic="book-cancel-booking">
       <bpmn:incoming>SequenceFlow_1nqzdr6</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0m6oe1j</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="TaskFinishBooking" name="Finish Booking" camunda:type="external" camunda:topic="finish-booking">
+    <bpmn:serviceTask id="TaskFinishBooking" name="Finish Booking" camunda:type="external" camunda:topic="book-finish-booking">
       <bpmn:incoming>SequenceFlow_14niawa</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_02bzrit</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="TaskUnreserveBooking" name="Unreserve Booking" camunda:type="external" camunda:topic="unreservce">
-      <bpmn:incoming>SequenceFlow_0m6oe1j</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1vc7t75</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="TaskReserveSeat" name="Create Booking" camunda:type="external" camunda:topic="create-booking">
+    <bpmn:serviceTask id="TaskReserveSeat" name="Create Booking" camunda:type="external" camunda:topic="book-create-booking">
       <bpmn:incoming>SequenceFlow_1wcx8n6</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0dgzqc3</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -97,7 +93,7 @@
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartBookFlight">
         <dc:Bounds x="330" y="102" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="338" y="145" width="21" height="14" />
+          <dc:Bounds x="337" y="145" width="24" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0bdl12r_di" bpmnElement="SequenceFlow_0bdl12r">
@@ -151,15 +147,11 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0m6oe1j_di" bpmnElement="SequenceFlow_0m6oe1j">
         <di:waypoint x="1395" y="176" />
-        <di:waypoint x="1445" y="176" />
+        <di:waypoint x="1459" y="176" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="EndEvent_172dgka_di" bpmnElement="EndEvent_172dgka">
-        <dc:Bounds x="1595" y="158" width="36" height="36" />
+        <dc:Bounds x="1459" y="158" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_1vc7t75_di" bpmnElement="SequenceFlow_1vc7t75">
-        <di:waypoint x="1545" y="176" />
-        <di:waypoint x="1595" y="176" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_18nnbig_di" bpmnElement="TaskCreateInvoice">
         <dc:Bounds x="809" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -171,9 +163,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_097lkdi_di" bpmnElement="TaskFinishBooking">
         <dc:Bounds x="1445" y="12" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_1mv0n04_di" bpmnElement="TaskUnreserveBooking">
-        <dc:Bounds x="1445" y="136" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_077arkw_di" bpmnElement="TaskReserveSeat">
         <dc:Bounds x="435" y="80" width="100" height="80" />
