@@ -10,7 +10,15 @@ from flight_booking.models import Ticket
 class FlightSerializer(serializers.ModelSerializer):
     class Meta:
         model = Flight
-        exclude = ('id', )
+        fields = (
+            'number',
+            'origin',
+            'destination',
+            'departure',
+            'arrival',
+            'capacity',
+            'available_seats' 
+        )
 
 class BookingSerializer(serializers.ModelSerializer):
     flight = serializers.SlugRelatedField(
