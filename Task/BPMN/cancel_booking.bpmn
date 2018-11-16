@@ -7,39 +7,37 @@
           <camunda:formField id="booking_number" label="Booking Number" type="string" />
         </camunda:formData>
       </bpmn:extensionElements>
-      <bpmn:outgoing>SequenceFlow_0vrj6p6</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1mctybc</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:serviceTask id="TaskCancelBooking" name="Cancel Booking" camunda:type="external" camunda:topic="cancel-cancel-booking">
-      <bpmn:incoming>SequenceFlow_08kufhy</bpmn:incoming>
-      <bpmn:incoming>SequenceFlow_12tnc6t</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1bhbtp0</bpmn:outgoing>
+      <bpmn:incoming>SequenceFlow_1mctybc</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0ljs0al</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="TaskCheckPayment" name="Check Payment" camunda:type="external" camunda:topic="cancel-check-payment">
-      <bpmn:incoming>SequenceFlow_0vrj6p6</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0ljs0al</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_05qqmva</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:userTask id="TaskRefund" name="Refund">
       <bpmn:incoming>SequenceFlow_0byqh7b</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_12tnc6t</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0diba0b</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="SequenceFlow_0vrj6p6" sourceRef="StartCancelFlight" targetRef="TaskCheckPayment" />
     <bpmn:exclusiveGateway id="ExclusiveGateway_1nrn4cw">
       <bpmn:incoming>SequenceFlow_05qqmva</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0byqh7b</bpmn:outgoing>
-      <bpmn:outgoing>SequenceFlow_08kufhy</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1sh98bx</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_05qqmva" sourceRef="TaskCheckPayment" targetRef="ExclusiveGateway_1nrn4cw" />
     <bpmn:sequenceFlow id="SequenceFlow_0byqh7b" name="paid" sourceRef="ExclusiveGateway_1nrn4cw" targetRef="TaskRefund">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${paid}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_08kufhy" name="not paid" sourceRef="ExclusiveGateway_1nrn4cw" targetRef="TaskCancelBooking">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">!${paid}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_12tnc6t" sourceRef="TaskRefund" targetRef="TaskCancelBooking" />
     <bpmn:endEvent id="EndEvent_1us4l7s">
-      <bpmn:incoming>SequenceFlow_1bhbtp0</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0diba0b</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1sh98bx</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_1bhbtp0" sourceRef="TaskCancelBooking" targetRef="EndEvent_1us4l7s" />
+    <bpmn:sequenceFlow id="SequenceFlow_1mctybc" sourceRef="StartCancelFlight" targetRef="TaskCancelBooking" />
+    <bpmn:sequenceFlow id="SequenceFlow_0ljs0al" sourceRef="TaskCancelBooking" targetRef="TaskCheckPayment" />
+    <bpmn:sequenceFlow id="SequenceFlow_0diba0b" sourceRef="TaskRefund" targetRef="EndEvent_1us4l7s" />
+    <bpmn:sequenceFlow id="SequenceFlow_1sh98bx" name="not paid" sourceRef="ExclusiveGateway_1nrn4cw" targetRef="EndEvent_1us4l7s" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="CancelFlight">
@@ -50,50 +48,50 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_18jrzcc_di" bpmnElement="TaskCancelBooking">
-        <dc:Bounds x="673" y="80" width="100" height="80" />
+        <dc:Bounds x="316" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_1dijbmz_di" bpmnElement="TaskCheckPayment">
-        <dc:Bounds x="309" y="80" width="100" height="80" />
+        <dc:Bounds x="470" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="UserTask_06ss37n_di" bpmnElement="TaskRefund">
-        <dc:Bounds x="470" y="238" width="100" height="80" />
+        <dc:Bounds x="631" y="238" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_0vrj6p6_di" bpmnElement="SequenceFlow_0vrj6p6">
-        <di:waypoint x="239" y="120" />
-        <di:waypoint x="309" y="120" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ExclusiveGateway_1nrn4cw_di" bpmnElement="ExclusiveGateway_1nrn4cw" isMarkerVisible="true">
-        <dc:Bounds x="495" y="95" width="50" height="50" />
+        <dc:Bounds x="656" y="95" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_05qqmva_di" bpmnElement="SequenceFlow_05qqmva">
-        <di:waypoint x="409" y="120" />
-        <di:waypoint x="495" y="120" />
+        <di:waypoint x="570" y="120" />
+        <di:waypoint x="656" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0byqh7b_di" bpmnElement="SequenceFlow_0byqh7b">
-        <di:waypoint x="520" y="145" />
-        <di:waypoint x="520" y="238" />
+        <di:waypoint x="681" y="145" />
+        <di:waypoint x="681" y="238" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="525" y="189" width="21" height="14" />
+          <dc:Bounds x="686" y="189" width="21" height="14" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_08kufhy_di" bpmnElement="SequenceFlow_08kufhy">
-        <di:waypoint x="545" y="120" />
-        <di:waypoint x="673" y="120" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="589" y="102" width="40" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_12tnc6t_di" bpmnElement="SequenceFlow_12tnc6t">
-        <di:waypoint x="570" y="278" />
-        <di:waypoint x="723" y="278" />
-        <di:waypoint x="723" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="EndEvent_1us4l7s_di" bpmnElement="EndEvent_1us4l7s">
         <dc:Bounds x="847" y="102" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_1bhbtp0_di" bpmnElement="SequenceFlow_1bhbtp0">
-        <di:waypoint x="773" y="120" />
+      <bpmndi:BPMNEdge id="SequenceFlow_1mctybc_di" bpmnElement="SequenceFlow_1mctybc">
+        <di:waypoint x="239" y="120" />
+        <di:waypoint x="316" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0ljs0al_di" bpmnElement="SequenceFlow_0ljs0al">
+        <di:waypoint x="416" y="120" />
+        <di:waypoint x="470" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0diba0b_di" bpmnElement="SequenceFlow_0diba0b">
+        <di:waypoint x="731" y="278" />
+        <di:waypoint x="865" y="278" />
+        <di:waypoint x="865" y="138" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1sh98bx_di" bpmnElement="SequenceFlow_1sh98bx">
+        <di:waypoint x="706" y="120" />
         <di:waypoint x="847" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="757" y="102" width="40" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
