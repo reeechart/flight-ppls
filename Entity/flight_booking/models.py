@@ -10,13 +10,28 @@ class Flight(models.Model):
     destination = models.CharField(_('Destination'), max_length=128)
     departure = models.DateTimeField(_('Departure'))
     arrival = models.DateTimeField(_('Arrival'))
-    available_seats = models.PositiveIntegerField(_('Available Seats'))
-
+    capacity = models.PositiveIntegerField(_('Available Seats'))
+    
+    @property
+    def available_seats(self):
+        return Booking.objects.filter(flights_number=self.number, is_canceled=False).count()
+    
 class Booking(models.Model):
+    PENDING = 'pending'
+    PAID = 'paid'
+    CANCELED = 'canceled'
+
+    STATUS_CHOICES = (
+        (PENDING, _('pending')),
+        (PAID, _('paid')),
+        (CANCELED, _('canceled')),
+    )
+    
     number = models.CharField(_('Number'), max_length=128, unique=True)
     user = models.ForeignKey(User, related_name='bookings', on_delete=models.CASCADE)
     flight = models.ForeignKey(Flight, related_name='bookings', on_delete=models.CASCADE)
     passengers = JSONField(_('Passangers'))
+    status = models.CharField(_('Status'), max_length=128, choices=STATUS_CHOICES)
 
 class Invoice(models.Model):
     user = models.ForeignKey(User, related_name='invoices', on_delete=models.CASCADE)
