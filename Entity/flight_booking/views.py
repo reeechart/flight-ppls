@@ -1,9 +1,12 @@
 from rest_framework import generics
 from rest_framework.views import APIView
+from rest_framework.response import Response
 
 import requests
 
 from django.contrib.auth.models import User
+
+from django.shortcuts import get_object_or_404
 
 from flight_booking.models import Flight
 from flight_booking.models import Booking
@@ -51,10 +54,20 @@ class TicketListView(generics.ListCreateAPIView):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
 
-class TicketView(generics.RetrieveAPIView):
-    queryset = Ticket.objects.all()
-    serializer_class = TicketSerializer
-    lookup_field = 'id'
+class TicketView(APIView):
+    def get(self, request):
+        print(request.query_params)
+        first_name = request.query_params.get('first-name')
+        last_name = request.query_params.get('last-name')
+        flight_number = request.query_params.get('flight-number')
+        ticket = get_object_or_404(
+            Ticket,
+            first_name=first_name,
+            last_name=last_name,
+            flight__number=flight_number
+        )
+        return Response(TicketSerializer(ticket).data, status=200)
+        
 
 class MockNotifyPayment(APIView):
     def post(self, request):

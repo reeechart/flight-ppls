@@ -37,6 +37,6 @@ urlpatterns = [
     path('users/<slug:id>/', UserView.as_view(), name='user'),
     path('invoices/', InvoiceListView.as_view(), name='invoice-list'),
     path('tickets/', TicketListView.as_view(), name='ticket-list'),
-    path('tickets/<slug:first_name>?second-name=<slug:last_name>?flight-number=<slug:flight_number>', TicketView.as_view(), name='ticket'),
+    path('tickets/get-one/', TicketView.as_view(), name='ticket'),
     path('mock-notify-payment/', MockNotifyPayment.as_view(), name="mock-notify-payment")
 ]
