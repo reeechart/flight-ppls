@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
-    "camunda-external-task-client-js": "^1.1.0-alpha1"
+    "camunda-external-task-client-js": "^1.1.0-alpha1",
+    "uuid": "^3.3.2"
   }
 }
