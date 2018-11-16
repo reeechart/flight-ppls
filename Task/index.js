@@ -119,7 +119,22 @@ client.subscribe('cancel-cancel-booking', async function({ task, taskService }) 
       status: 'canceled'
     });
   } catch(error) {
-    console.log(error)
+    console.log(error);
+  }
+  await taskService.complete(task, processVariables);
+});
+
+client.subscribe('reschedule-get-passengers', async function({ task, taskService}) {
+  const bookingNumber = task.variables.get('booking_number');
+  const newFlightNumber = task.variables.get('flight_number');
+  const processVariables = new Variables();
+
+  try {
+    let response = await axios.get(BASE_URL+'bookings/'+bookingNumber+'/');
+    passengers = response.data.passengers
+    processVariables.set('passengers', passengers);
+  } catch(error) {
+    console.log(error);
   }
   await taskService.complete(task, processVariables);
 });
