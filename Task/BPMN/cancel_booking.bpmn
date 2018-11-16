@@ -37,7 +37,9 @@
     <bpmn:sequenceFlow id="SequenceFlow_1mctybc" sourceRef="StartCancelFlight" targetRef="TaskCancelBooking" />
     <bpmn:sequenceFlow id="SequenceFlow_0ljs0al" sourceRef="TaskCancelBooking" targetRef="TaskCheckPayment" />
     <bpmn:sequenceFlow id="SequenceFlow_0diba0b" sourceRef="TaskRefund" targetRef="EndEvent_1us4l7s" />
-    <bpmn:sequenceFlow id="SequenceFlow_1sh98bx" name="not paid" sourceRef="ExclusiveGateway_1nrn4cw" targetRef="EndEvent_1us4l7s" />
+    <bpmn:sequenceFlow id="SequenceFlow_1sh98bx" name="not paid" sourceRef="ExclusiveGateway_1nrn4cw" targetRef="EndEvent_1us4l7s">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!paid}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="CancelFlight">
