@@ -35,7 +35,11 @@ const jsonParser = data => {
 client.subscribe('book-create-booking', async function({ task, taskService }) {
   const flightNumber = task.variables.get('flight_number');
   const username = task.variables.get('username');
-  const passengers = jsonParser(task.variables.get('passengers'));
+  
+  let passengers = task.variables.get('passengers');
+  if(typeof(passengers) == 'string') {
+    passengers = jsonParser(passengers)
+  }
   const processVariables = new Variables();
   processVariables.set('passengers', passengers)
   const bookingNumber = uuidv4();
@@ -108,6 +112,7 @@ client.subscribe('cancel-cancel-booking', async function({ task, taskService }) 
   const processVariables = new Variables();
 
   try {
+    console.log(bookingNumber)
     let response = await axios.get(BASE_URL+'bookings/'+bookingNumber+'/');
     bookingDetail = response.data
     if (bookingDetail.status === 'paid') {
@@ -124,7 +129,7 @@ client.subscribe('cancel-cancel-booking', async function({ task, taskService }) 
   await taskService.complete(task, processVariables);
 });
 
-client.subscribe('reschedule-get-passengers', async function({ task, taskService}) {
+client.subscribe('reschedule-get-credentials', async function({ task, taskService}) {
   const bookingNumber = task.variables.get('booking_number');
   const newFlightNumber = task.variables.get('flight_number');
   const processVariables = new Variables();
@@ -132,7 +137,9 @@ client.subscribe('reschedule-get-passengers', async function({ task, taskService
   try {
     let response = await axios.get(BASE_URL+'bookings/'+bookingNumber+'/');
     passengers = response.data.passengers
+    username = response.data.user
     processVariables.set('passengers', passengers);
+    processVariables.set('username', username);
   } catch(error) {
     console.log(error);
   }

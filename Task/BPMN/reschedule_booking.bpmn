@@ -11,10 +11,18 @@
       <bpmn:outgoing>SequenceFlow_0vtpdyw</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:callActivity id="TaskCancelBookedFlight" name="Cancel Booked Flight" calledElement="CancelBooking">
+      <bpmn:extensionElements>
+        <camunda:in source="booking_number" target="booking_number" />
+      </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_19zyape</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0lkzzxe</bpmn:outgoing>
     </bpmn:callActivity>
     <bpmn:callActivity id="TaskBookNewFlight" name="Book New Flight" calledElement="BookFlight">
+      <bpmn:extensionElements>
+        <camunda:in source="flight_number" target="flight_number" />
+        <camunda:in source="passengers" target="passengers" />
+        <camunda:in source="username" target="username" />
+      </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0lkzzxe</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0sw6dgt</bpmn:outgoing>
     </bpmn:callActivity>
@@ -23,9 +31,9 @@
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0lkzzxe" sourceRef="TaskCancelBookedFlight" targetRef="TaskBookNewFlight" />
     <bpmn:sequenceFlow id="SequenceFlow_0sw6dgt" sourceRef="TaskBookNewFlight" targetRef="EndEvent_1k5ugst" />
-    <bpmn:sequenceFlow id="SequenceFlow_0vtpdyw" sourceRef="RescheduleBookingStart" targetRef="TaskGetFlightPassengers" />
-    <bpmn:sequenceFlow id="SequenceFlow_19zyape" sourceRef="TaskGetFlightPassengers" targetRef="TaskCancelBookedFlight" />
-    <bpmn:serviceTask id="TaskGetFlightPassengers" name="Get Flight Passengers" camunda:type="external" camunda:topic="reschedule-get-passenger">
+    <bpmn:sequenceFlow id="SequenceFlow_0vtpdyw" sourceRef="RescheduleBookingStart" targetRef="TaskGetFlightCredentials" />
+    <bpmn:sequenceFlow id="SequenceFlow_19zyape" sourceRef="TaskGetFlightCredentials" targetRef="TaskCancelBookedFlight" />
+    <bpmn:serviceTask id="TaskGetFlightCredentials" name="Get Flight Credentials" camunda:type="external" camunda:topic="reschedule-get-credentials">
       <bpmn:incoming>SequenceFlow_0vtpdyw</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_19zyape</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -63,7 +71,7 @@
         <di:waypoint x="338" y="288" />
         <di:waypoint x="429" y="288" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ServiceTask_0atvkuf_di" bpmnElement="TaskGetFlightPassengers">
+      <bpmndi:BPMNShape id="ServiceTask_0atvkuf_di" bpmnElement="TaskGetFlightCredentials">
         <dc:Bounds x="238" y="248" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
