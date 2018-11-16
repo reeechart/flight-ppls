@@ -9,5 +9,5 @@ class Payment(models.Model):
     @classmethod
     def call(self, url, body):
         print("Sending message")
-        request = requests.post(url, data=body)
-        print(request)
+        response = requests.post(url, data=body, headers={'Content-type': 'content_type_value'})
+        print(response.content)

@@ -9,7 +9,7 @@ const config = { baseUrl: 'http://localhost:8080/engine-rest', use: logger };
 
 
 const client = new Client(config);
-
+const baseUrl = "http://localhost:8080/engine-rest" 
 const BASE_URL = "http://localhost:8000/"
 
 const jsonParser = data => {
@@ -77,7 +77,21 @@ client.subscribe('book-create-invoice', async function({ task, taskService }) {
 });
 
 client.subscribe('book-notify-payment-gateway', async function({ task, taskService }) {
-  const paymentGateWayUrl = "http://localhost:8000/payment/"
+  const paymentGateWayUrl = "http://localhost:8000/mock/payment"
+  try {
+    let response = await axios.post(paymentGateWayUrl, {
+        callback_url: baseUrl+"/message/",
+        callback_body: {
+          messageName: "PaymentGateway",
+          processInstanceId: task.id
+        }
+    });
+    console.log(response.status)
+
+  } catch(error) {
+    console.log(error)
+
+  }
   await taskService.complete(task);
 });
 
@@ -100,6 +114,14 @@ client.subscribe('book-issue-ticket', async function({ task, taskService }) {
 });
 
 client.subscribe('book-finish-booking', async function({ task, taskService }) {
+  const bookingNumber = task.variables.get('booking_number');
+  try {
+    await axios.patch(BASE_URL+'bookings/'+bookingNumber+'/', {
+      status: 'paid'
+    });
+  } catch(error ){
+    
+  }
   await taskService.complete(task);
 });
 
