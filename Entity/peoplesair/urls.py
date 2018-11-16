@@ -25,7 +25,7 @@ from flight_booking.views import UserListView
 from flight_booking.views import InvoiceListView
 from flight_booking.views import TicketView
 from flight_booking.views import MockNotifyPayment
-
+from mock.views import PaymentView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('flights/', FlightListView.as_view(), name='flight-list'),
@@ -36,5 +36,6 @@ urlpatterns = [
     path('users/<slug:id>/', UserView.as_view(), name='user'),
     path('invoices/', InvoiceListView.as_view(), name='invoice-list'),
     path('tickets/', TicketView.as_view(), name='ticket-list'),
+    path('mock/payment', PaymentView.as_view(), name='mock-payment'),
     path('mock-notify-payment/', MockNotifyPayment.as_view(), name="mock-notify-payment")
 ]
