@@ -17,7 +17,8 @@ class FlightSerializer(serializers.ModelSerializer):
             'departure',
             'arrival',
             'capacity',
-            'available_seats' 
+            'available_seats',
+            'price' 
         )
 
 class BookingSerializer(serializers.ModelSerializer):

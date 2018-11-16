@@ -8,7 +8,8 @@
       "destination": "Medan",
       "departure": "2018-11-11T12:00:00+00:00",
       "arrival": "2018-11-11T14:20:00+00:00",
-      "capacity": 70
+      "capacity": 70,
+      "price": 1500000
     }
   },
   {
@@ -20,7 +21,8 @@
       "destination": "Bandung",
       "departure": "2018-12-11T12:00:00+00:00",
       "arrival": "2018-12-11T14:20:00+00:00",
-      "capacity": 70
+      "capacity": 70,
+      "price": 1500000
     }
   }
 ]

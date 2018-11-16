@@ -12,6 +12,7 @@ class Flight(models.Model):
     departure = models.DateTimeField(_('Departure'))
     arrival = models.DateTimeField(_('Arrival'))
     capacity = models.PositiveIntegerField(_('Available Seats'))
+    price = models.FloatField(_('Price'))
     
     @property
     def available_seats(self):
