@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from jsonfield import JSONField
+import json
 
 from django.contrib.auth.models import User
 
@@ -14,7 +15,11 @@ class Flight(models.Model):
     
     @property
     def available_seats(self):
-        return Booking.objects.filter(flights_number=self.number, is_canceled=False).count()
+        bookings = Booking.objects.filter(flight__number=self.number).exclude(status=Booking.CANCELED)
+        occupied_seats = 0
+        for booking in bookings:
+            occupied_seats += len(booking.passengers)
+        return self.capacity - occupied_seats
     
 class Booking(models.Model):
     PENDING = 'pending'
