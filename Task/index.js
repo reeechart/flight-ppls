@@ -16,9 +16,8 @@ const params = {
  /*
   * create the client
   */
+ const soapClient = new EasySoap(params)
  
- 
- var soapClient = EasySoap(params);
 const client = new Client(config);
 const baseUrl = "http://localhost:8080/engine-rest" 
 const BASE_URL = "http://localhost:8000/"
@@ -92,7 +91,7 @@ client.subscribe('book-create-invoice', async function({ task, taskService }) {
 });
 
 client.subscribe('book-notify-payment-gateway', async function({ task, taskService }) {
-
+  const processVariables = new Variables();
   try {
     let response = await soapClient.call({
       method    : 'beginPayment',
@@ -101,24 +100,27 @@ client.subscribe('book-notify-payment-gateway', async function({ task, taskServi
         amount: task.variables.get('totalPrice')
       }
     })
-    console.log(response)
+    
+    processVariables.set('paymentId',response.data.return);
 
   } catch(error) {
     console.log(error)
 
   }
-  await taskService.complete(task);
+  await taskService.complete(task, processVariables);
 });
 
 
 client.subscribe('book-check-payment-status', async function({ task, taskService }) {
   const processVariables = new Variables();
+  const paymentId = task.variables.get('paymentId');
+  console.log(paymentId);
   try {
     var status = ''
     soapClient.call({
       method: 'getPaymentEvents',
       params: {
-        paymentId: '58a7e229-11b7-44f7-afb4-d722095c5bf9'
+        paymentId: paymentId,
       }
     }).then((res) => {
         let data = res.response.body;
