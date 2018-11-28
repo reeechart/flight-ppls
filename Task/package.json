@@ -11,6 +11,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "camunda-external-task-client-js": "^1.1.0-alpha1",
-    "uuid": "^3.3.2"
+    "easysoap": "^2.0.2",
+    "uuid": "^3.3.2",
+    "xml2js": "^0.4.19"
   }
 }

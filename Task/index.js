@@ -1,13 +1,24 @@
 const axios = require('axios')
 const http = require('http');
 const uuidv4 = require('uuid/v4');
-
+const EasySoap = require('easysoap');
 const { Client, logger, Variables } = require('camunda-external-task-client-js');
-
+const parseString = require('xml2js').parseString;
 
 const config = { baseUrl: 'http://localhost:8080/engine-rest', use: logger };
 
+const params = {
+  host: '167.205.35.211:8080',
+  path: '/easypay/PaymentService',
+  wsdl: '/easypay/PaymentService?wsdl',
+ }
 
+ /*
+  * create the client
+  */
+ 
+ 
+ var soapClient = EasySoap(params);
 const client = new Client(config);
 const baseUrl = "http://localhost:8080/engine-rest" 
 const BASE_URL = "http://localhost:8000/"
@@ -81,16 +92,16 @@ client.subscribe('book-create-invoice', async function({ task, taskService }) {
 });
 
 client.subscribe('book-notify-payment-gateway', async function({ task, taskService }) {
-  const paymentGateWayUrl = "http://localhost:8000/mock/payment"
+
   try {
-    let response = await axios.post(paymentGateWayUrl, {
-        callback_url: baseUrl+"/message/",
-        callback_body: {
-          messageName: "PaymentGateway",
-          processInstanceId: task.id
-        }
-    });
-    console.log(response.status)
+    let response = await soapClient.call({
+      method    : 'beginPayment',
+      params: {
+        paymentMethodId: 'bank',
+        amount: task.variables.get('totalPrice')
+      }
+    })
+    console.log(response)
 
   } catch(error) {
     console.log(error)
@@ -98,6 +109,41 @@ client.subscribe('book-notify-payment-gateway', async function({ task, taskServi
   }
   await taskService.complete(task);
 });
+
+
+client.subscribe('book-check-payment-status', async function({ task, taskService }) {
+  const processVariables = new Variables();
+  try {
+    var status = ''
+    soapClient.call({
+      method: 'getPaymentEvents',
+      params: {
+        paymentId: '58a7e229-11b7-44f7-afb4-d722095c5bf9'
+      }
+    }).then((res) => {
+        let data = res.response.body;
+        let tIndex = data.search('type="');
+        data = data.substring(tIndex)
+        data = data.substring(data.search("\""));
+        data = data.substring(1);
+        // console.log(data)
+        data = data.substring(0,data.search("\""));
+        status = data;
+      }).catch((err) => {
+      console.log(err)
+    })  
+    let  response = status === 'SUCCESS';
+    console.log("Payment valid? "+ response);
+    processVariables.set('paid', response)
+
+  } catch(error) {
+    console.log(error)
+
+  }
+  await taskService.complete(task, processVariables);
+});
+
+
 
 client.subscribe('book-issue-ticket', async function({ task, taskService }) {
   const flightNumber = task.variables.get('flight_number');
