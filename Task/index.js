@@ -13,10 +13,17 @@ const params = {
   wsdl: '/easypay/PaymentService?wsdl',
  }
 
- /*
-  * create the client
-  */
- const soapClient = new EasySoap(params)
+const hotelParams = {
+  host: '167.205.35.216:8081',
+  path: '/',
+  wsdl: '/?wsdl'
+}
+
+/*
+* create the client
+*/
+const soapClient = new EasySoap(params)
+const hotelSoapClient = new EasySoap(hotelParams)
  
 const client = new Client(config);
 const baseUrl = "http://localhost:8080/engine-rest" 
@@ -45,6 +52,7 @@ const jsonParser = data => {
 client.subscribe('book-create-booking', async function({ task, taskService }) {
   const flightNumber = task.variables.get('flight_number');
   const username = task.variables.get('username');
+  const eventId = task.variables.get('event_id');
   
   let passengers = task.variables.get('passengers');
   if(typeof(passengers) == 'string') {
@@ -71,6 +79,8 @@ client.subscribe('book-create-booking', async function({ task, taskService }) {
     console.log(error)
     processVariables.set('created', false);
   }
+
+  processVariables.set('event_id', eventId);
   await taskService.complete(task, processVariables);
 });
 
@@ -167,6 +177,7 @@ client.subscribe('book-issue-ticket', async function({ task, taskService }) {
 
 client.subscribe('book-finish-booking', async function({ task, taskService }) {
   const bookingNumber = task.variables.get('booking_number');
+  
   try {
     await axios.patch(BASE_URL+'bookings/'+bookingNumber+'/', {
       status: 'paid'
@@ -175,6 +186,34 @@ client.subscribe('book-finish-booking', async function({ task, taskService }) {
     
   }
   await taskService.complete(task);
+});
+
+client.subscribe('book-book-event', async function({task, taskService}) {
+  const eventId = task.variables.get('event_id');
+  const username = task.variables.get('username');
+  let userId = 0;
+
+  if (eventId != null) {
+    try {
+      await axios.get(BASE_URL+'users/'+username+'/');
+      userId = response.data.id;
+    } catch(error) {
+      console.log(error);
+    }
+
+    try {
+      hotelSoapClient.call({
+        method: 'bookTicket',
+        params: {
+          eventId: eventId,
+          userId: userId,
+          sectionsId: '[1]'
+        }
+      })
+    } catch(error) {
+      console.log(error);
+    }
+  }
 });
 
 client.subscribe('cancel-cancel-booking', async function({ task, taskService }) {

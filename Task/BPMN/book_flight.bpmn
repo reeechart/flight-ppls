@@ -10,6 +10,7 @@
           <camunda:formField id="flight_number" label="Flight Id" type="long" />
           <camunda:formField id="username" label="User Id" type="long" />
           <camunda:formField id="passengers" type="string" />
+          <camunda:formField id="event_id" label="Event ID" type="long" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_1wcx8n6</bpmn:outgoing>
@@ -26,9 +27,8 @@
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:endEvent id="EndEvent_0d7djxs">
-      <bpmn:incoming>SequenceFlow_02bzrit</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_10b3pjz</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_02bzrit" sourceRef="TaskFinishBooking" targetRef="EndEvent_0d7djxs" />
     <bpmn:sequenceFlow id="SequenceFlow_0m6oe1j" sourceRef="TaskCancelBooking" targetRef="EndEvent_172dgka" />
     <bpmn:endEvent id="EndEvent_172dgka">
       <bpmn:incoming>SequenceFlow_0m6oe1j</bpmn:incoming>
@@ -43,7 +43,7 @@
     </bpmn:serviceTask>
     <bpmn:serviceTask id="TaskFinishBooking" name="Finish Booking" camunda:type="external" camunda:topic="book-finish-booking">
       <bpmn:incoming>SequenceFlow_14niawa</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_02bzrit</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1vdmx49</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="TaskReserveSeat" name="Create Booking" camunda:type="external" camunda:topic="book-create-booking">
       <bpmn:incoming>SequenceFlow_1wcx8n6</bpmn:incoming>
@@ -89,6 +89,26 @@
       <bpmn:incoming>SequenceFlow_1g4snz8</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1qyvld5</bpmn:outgoing>
     </bpmn:sendTask>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_0ux9590">
+      <bpmn:incoming>SequenceFlow_1vdmx49</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_10b3pjz</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0cyh60w</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_1vdmx49" sourceRef="TaskFinishBooking" targetRef="ExclusiveGateway_0ux9590" />
+    <bpmn:sequenceFlow id="SequenceFlow_10b3pjz" name="no event" sourceRef="ExclusiveGateway_0ux9590" targetRef="EndEvent_0d7djxs">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${event_id == null}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_0cyh60w" name="event exist" sourceRef="ExclusiveGateway_0ux9590" targetRef="TaskBookEvent">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${event_id != null}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="EndEvent_1drd1ex">
+      <bpmn:incoming>SequenceFlow_1laxj4x</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1laxj4x" sourceRef="TaskBookEvent" targetRef="EndEvent_1drd1ex" />
+    <bpmn:sendTask id="TaskBookEvent" name="Book Event" camunda:type="external" camunda:topic="book-book-event">
+      <bpmn:incoming>SequenceFlow_0cyh60w</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1laxj4x</bpmn:outgoing>
+    </bpmn:sendTask>
   </bpmn:process>
   <bpmn:message id="Message_102mu27" name="PaymentGateway" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -106,12 +126,8 @@
         <dc:Bounds x="1130" y="102" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndEvent_0d7djxs_di" bpmnElement="EndEvent_0d7djxs">
-        <dc:Bounds x="1795" y="1" width="36" height="36" />
+        <dc:Bounds x="1885" y="84" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_02bzrit_di" bpmnElement="SequenceFlow_02bzrit">
-        <di:waypoint x="1725" y="19" />
-        <di:waypoint x="1795" y="19" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0m6oe1j_di" bpmnElement="SequenceFlow_0m6oe1j">
         <di:waypoint x="1556" y="207" />
         <di:waypoint x="1621" y="207" />
@@ -203,6 +219,39 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="SendTask_0t0r31i_di" bpmnElement="TaskCheckPaymentStatus">
         <dc:Bounds x="1227" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0ux9590_di" bpmnElement="ExclusiveGateway_0ux9590" isMarkerVisible="true">
+        <dc:Bounds x="1781" y="-6" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1vdmx49_di" bpmnElement="SequenceFlow_1vdmx49">
+        <di:waypoint x="1725" y="19" />
+        <di:waypoint x="1781" y="19" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_10b3pjz_di" bpmnElement="SequenceFlow_10b3pjz">
+        <di:waypoint x="1806" y="44" />
+        <di:waypoint x="1806" y="102" />
+        <di:waypoint x="1885" y="102" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1758" y="66" width="44" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0cyh60w_di" bpmnElement="SequenceFlow_0cyh60w">
+        <di:waypoint x="1806" y="-6" />
+        <di:waypoint x="1806" y="-60" />
+        <di:waypoint x="1881" y="-60" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1753" y="-43" width="54" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_1drd1ex_di" bpmnElement="EndEvent_1drd1ex">
+        <dc:Bounds x="2031" y="-78" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1laxj4x_di" bpmnElement="SequenceFlow_1laxj4x">
+        <di:waypoint x="1981" y="-60" />
+        <di:waypoint x="2031" y="-60" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="SendTask_15qufnp_di" bpmnElement="TaskBookEvent">
+        <dc:Bounds x="1881" y="-100" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
