@@ -42,7 +42,7 @@ client.subscribe('book-create-booking', async function({ task, taskService }) {
   }
   const processVariables = new Variables();
   processVariables.set('passengers', passengers)
-  const bookingNumber = uuidv4();
+  const bookingNumber = task.id;
   try {
     let response = await axios.get(BASE_URL+'flights/'+flightNumber+'/');
     let totalPrice = passengers.length * response.data.price;
