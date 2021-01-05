@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "camunda-external-task-client-js": "^1.1.0-alpha1",
     "easysoap": "^2.0.2",
     "uuid": "^3.3.2",
